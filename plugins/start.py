@@ -20,6 +20,7 @@ WAIT_MSG = """"<b>Processing ...</b>"""
 
 REPLY_ERROR = """<code>Use this command as a replay to any telegram message with out any spaces.</code>"""
 
+USERS_LIST = """<b>Active:-</b> {active},<b>Blocked:-</b> {blocked}""" 
 
 #=====================================================================================##
 
@@ -154,7 +155,7 @@ async def subscribers_count(bot, m: Message):
     active = messages[0]
     blocked = messages[1]
     await m.delete()
-    await msg.edit(users_info(active, blocked))
+    await msg.edit(USERS_LIST.format(active, blocked))
 
 
 @Bot.on_message(filters.private & filters.command('broadcast') & filters.user(ADMINS))
