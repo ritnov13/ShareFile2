@@ -150,11 +150,11 @@ async def subscribers_count(bot, m: Message):
     if id not in ADMINS:
         return
     msg = await m.reply_text(WAIT_MSG)
-    messages = await users_info(bot)
+    messages = await users_info()
     active = messages[0]
     blocked = messages[1]
     await m.delete()
-    await msg.edit(users_info.format('active', 'blocked'))
+    await msg.edit(users_info.format(active, blocked))
 
 
 @Bot.on_message(filters.private & filters.command('broadcast') & filters.user(ADMINS))
