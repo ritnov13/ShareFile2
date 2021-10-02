@@ -2,7 +2,7 @@ import asyncio
 from database.sql import query_msg
 from pyrogram.errors import FloodWait
 
-async def users_info():
+async def users_info(bot):
     users = 0
     blocked = 0
     identity = await query_msg()
