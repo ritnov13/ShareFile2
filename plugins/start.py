@@ -154,7 +154,6 @@ async def subscribers_count(bot, m: Message):
     active = messages[0]
     blocked = messages[1]
     await m.delete()
-    await msg.edit(USERS_LIST.format(active, blocked))
 
 
 @Bot.on_message(filters.private & filters.command('broadcast') & filters.user(ADMINS))
