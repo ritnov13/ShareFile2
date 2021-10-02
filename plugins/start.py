@@ -20,7 +20,7 @@ WAIT_MSG = """"<b>Processing ...</b>"""
 
 REPLY_ERROR = """<code>Use this command as a replay to any telegram message with out any spaces.</code>"""
 
-USERS_LIST = "{active} {blocked}"
+USERS_LIST = "<b>Active Users:-</b> {active}\n <b>Users Who Blocked Your Bot:-</b> {blocked}"
 
 #=====================================================================================##
 
