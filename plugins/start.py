@@ -1,4 +1,4 @@
-#(©)Codexbotz
+#(©)CodeXBotz
 import os
 import asyncio
 from pyrogram import Client, filters, __version__
@@ -8,19 +8,14 @@ from pyrogram.errors import FloodWait, UserIsBlocked, InputUserDeactivated
 from bot import Bot
 from config import ADMINS, FORCE_MSG, START_MSG, OWNER_ID, CUSTOM_CAPTION, DISABLE_CHANNEL_BUTTON
 from helper_func import subscribed, encode, decode, get_messages
-from database.support import users_info
-from database.sql import add_user, query_msg
+from database.sql import add_user, query_msg, full_userbase
 
 
 #=====================================================================================##
 
-
-
 WAIT_MSG = """"<b>Processing ...</b>"""
 
 REPLY_ERROR = """<code>Use this command as a replay to any telegram message with out any spaces.</code>"""
-
-USERS_LIST = "°<b>Active Users:-</b> {active}\n°<b>Users Who Blocked Your Bot:-</b> {blocked}"
 
 #=====================================================================================##
 
@@ -29,7 +24,10 @@ USERS_LIST = "°<b>Active Users:-</b> {active}\n°<b>Users Who Blocked Your Bot:
 async def start_command(client: Client, message: Message):
     id = message.from_user.id
     user_name = '@' + message.from_user.username if message.from_user.username else None
-    await add_user(id, user_name)
+    try:
+        await add_user(id, user_name)
+    except:
+        pass
     text = message.text
     if len(text)>7:
         try:
@@ -145,16 +143,11 @@ async def not_joined(client: Client, message: Message):
         disable_web_page_preview = True
     )
 
-@Bot.on_message(filters.private & filters.command('users'))
-async def subscribers_count(bot, m: Message):
-    id = m.from_user.id
-    if id not in ADMINS:
-        return
-    msg = await m.reply_text(WAIT_MSG)
-    messages = await users_info(bot)
-    await m.delete()
-    await msg.edit(USERS_LIST.format(active = messages[0], blocked = messages[1]))
-
+@Bot.on_message(filters.command('users') & filters.private & filters.user(ADMINS))
+async def get_users(client: Bot, message: Message):
+    msg = await client.send_message(chat_id=message.chat.id, text=WAIT_MSG)
+    users = await full_userbase()
+    await msg.edit(f"{len(users)} users are using this bot")
 
 @Bot.on_message(filters.private & filters.command('broadcast') & filters.user(ADMINS))
 async def send_text(client: Bot, message: Message):
